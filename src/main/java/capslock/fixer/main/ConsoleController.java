@@ -16,17 +16,20 @@
 package capslock.fixer.main;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.WindowEvent;
 
+import java.util.stream.Stream;
+
 
 public class ConsoleController{
+    static private final int BUFFER_MAX = 20;
 
     @FXML private TextField textField;
-
-
+    @FXML private TextArea textArea;
 
     void onCreate(WindowEvent event) {
 
@@ -40,5 +43,18 @@ public class ConsoleController{
         textField.setText(null);
 
         ConsoleHandler.INST.commandRequest(rawInput);
+    }
+
+    final void out(String messge) {
+        final StringBuilder stringBuilder = new StringBuilder(messge + '\n');
+
+        Stream.of(textArea.getText().split("\n"))
+                .limit(BUFFER_MAX)
+                .forEach(str -> {
+                    stringBuilder.append(str);
+                    stringBuilder.append('\n');
+                });
+
+        textArea.setText(stringBuilder.toString());
     }
 }

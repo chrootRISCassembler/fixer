@@ -44,6 +44,7 @@ enum ConsoleHandler {
             Command commandObject = commandConstructor.newInstance(wordList);
         }catch (ClassNotFoundException ex){
             Logger.INST.debug(wordList.get(0) + " class is not found");
+            controller.out(wordList.get(0) + "というコマンドは見つかりません.");
 
         }catch (NoSuchMethodException ex){
             ex.printStackTrace();
