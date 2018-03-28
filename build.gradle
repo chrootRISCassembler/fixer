@@ -37,10 +37,24 @@ startScripts.enabled = false
 distZip.enabled = false
 distTar.enabled = false
 
+apply plugin: 'com.github.johnrengelman.shadow'
+startShadowScripts.enabled = false
+shadowDistTar.enabled = false
+shadowDistZip.enabled = false
+
 repositories {
     mavenCentral()
     flatDir{
         dirs 'lib'
+    }
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.2'
     }
 }
 
