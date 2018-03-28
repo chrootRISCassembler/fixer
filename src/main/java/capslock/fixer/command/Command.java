@@ -18,10 +18,10 @@ package capslock.fixer.command;
 import java.util.List;
 
 public abstract class Command {
-    protected List<String> arg;
-    protected Command(List<String> arg){
+    private List<String> arg;
+    Command(List<String> arg){
 
     }
 
-    abstract boolean run();
+    abstract public boolean run();
 }

@@ -42,21 +42,28 @@ enum ConsoleHandler {
         classNameBuilder.append(Character.toUpperCase(wordList.get(0).charAt(0)));
         classNameBuilder.append(wordList.get(0).substring(1));
 
+        final Command commandObject;
+
         try {
             Class<? extends Command> commandClass = Class.forName(classNameBuilder.toString()).asSubclass(Command.class);
             Constructor<? extends Command> commandConstructor = commandClass.getDeclaredConstructor(List.class);
-            Command commandObject = commandConstructor.newInstance(wordList);
+            commandObject = commandConstructor.newInstance(wordList);
         }catch (ClassNotFoundException ex){
             Logger.INST.debug(wordList.get(0) + " class is not found");
             controller.out(wordList.get(0) + "というコマンドは見つかりません.");
+            return;
 
         }catch (NoSuchMethodException ex){
             ex.printStackTrace();
             System.err.println("constructor err");
+            return;
         }catch (InstantiationException | IllegalAccessException | InvocationTargetException ex){
             ex.printStackTrace();
             System.err.println("new fail");
+            return;
         }
+
+        commandObject.run();
     }
     void setController(ConsoleController controller){
         this.controller = controller;
