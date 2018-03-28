@@ -1,0 +1,9 @@
+.text-field{
+    -fx-background-color: black;
+    -fx-text-fill: white;
+}
+
+.text-area .content{
+    -fx-background-color: black;
+    -fx-text-fill: white;
+}

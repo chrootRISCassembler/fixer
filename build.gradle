@@ -146,6 +146,7 @@ task forceUpdateLib{
 
 task cpFXML(type: Copy){
     from 'src/main/resources/Console.fxml'
+    from 'src/main/resources/Console.css'
     into 'build/classes/java/main/capslock/fixer/main'
 }
 
