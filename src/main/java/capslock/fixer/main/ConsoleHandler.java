@@ -38,8 +38,12 @@ enum ConsoleHandler {
 
         if(wordList.isEmpty())return;
 
+        final StringBuilder classNameBuilder = new StringBuilder("capslock.fixer.command.");
+        classNameBuilder.append(Character.toUpperCase(wordList.get(0).charAt(0)));
+        classNameBuilder.append(wordList.get(0).substring(1));
+
         try {
-            Class<? extends Command> commandClass = Class.forName("capslock.fixer.Command." + wordList.get(0)).asSubclass(Command.class);
+            Class<? extends Command> commandClass = Class.forName(classNameBuilder.toString()).asSubclass(Command.class);
             Constructor<? extends Command> commandConstructor = commandClass.getDeclaredConstructor(List.class);
             Command commandObject = commandConstructor.newInstance(wordList);
         }catch (ClassNotFoundException ex){
