@@ -19,15 +19,15 @@ import methg.commonlib.trivial_logger.Logger;
 
 import java.util.List;
 
-public class attach extends command {
-    public attach(List<String> arg){
+public class Attach extends Command {
+    public Attach(List<String> arg){
         super(arg);
-        Logger.INST.debug("attach constructor");
+        Logger.INST.debug("Attach constructor");
     }
 
     @Override
     public boolean run() {
-        Logger.INST.debug("attach run");
+        Logger.INST.debug("Attach run");
         return true;
     }
 }

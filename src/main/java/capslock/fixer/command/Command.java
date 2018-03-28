@@ -17,9 +17,9 @@ package capslock.fixer.command;
 
 import java.util.List;
 
-public abstract class command {
+public abstract class Command {
     protected List<String> arg;
-    protected command(List<String> arg){
+    protected Command(List<String> arg){
 
     }
 

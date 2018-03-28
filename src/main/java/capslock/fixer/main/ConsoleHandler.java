@@ -15,7 +15,7 @@
 
 package capslock.fixer.main;
 
-import capslock.fixer.command.command;
+import capslock.fixer.command.Command;
 import methg.commonlib.trivial_logger.Logger;
 
 import java.lang.reflect.Constructor;
@@ -39,9 +39,9 @@ enum ConsoleHandler {
         if(wordList.isEmpty())return;
 
         try {
-            Class<? extends command> commandClass = Class.forName("capslock.fixer.command." + wordList.get(0)).asSubclass(command.class);
-            Constructor<? extends command> commandConstructor = commandClass.getDeclaredConstructor(List.class);
-            command commandObject = commandConstructor.newInstance(wordList);
+            Class<? extends Command> commandClass = Class.forName("capslock.fixer.Command." + wordList.get(0)).asSubclass(Command.class);
+            Constructor<? extends Command> commandConstructor = commandClass.getDeclaredConstructor(List.class);
+            Command commandObject = commandConstructor.newInstance(wordList);
         }catch (ClassNotFoundException ex){
             Logger.INST.debug(wordList.get(0) + " class is not found");
 

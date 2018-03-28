@@ -19,10 +19,10 @@ import methg.commonlib.trivial_logger.Logger;
 
 import java.util.List;
 
-public class detach extends command {
-    public detach(List<String> arg){
+public class Detach extends Command {
+    public Detach(List<String> arg){
         super(arg);
-        Logger.INST.debug("detach constructor");
+        Logger.INST.debug("Detach constructor");
     }
 
     @Override
