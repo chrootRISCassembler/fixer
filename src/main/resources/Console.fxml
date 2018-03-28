@@ -25,6 +25,6 @@
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@Console.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="capslock.fixer.main.ConsoleController">
    <children>
       <TextField fx:id="textField" onKeyPressed="#onEnter" />
-      <TextArea prefHeight="200.0" prefWidth="200.0" />
+      <TextArea editable="false" VBox.vgrow="ALWAYS" />
    </children>
 </VBox>
