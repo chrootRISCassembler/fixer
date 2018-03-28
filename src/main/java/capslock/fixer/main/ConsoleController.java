@@ -46,8 +46,8 @@ public class ConsoleController{
         ConsoleHandler.INST.commandRequest(rawInput);
     }
 
-    final void out(String messge) {
-        final StringBuilder stringBuilder = new StringBuilder(messge + '\n');
+    final void out(String message) {
+        final StringBuilder stringBuilder = new StringBuilder(message + '\n');
 
         Stream.of(textArea.getText().split("\n"))
                 .limit(BUFFER_MAX)
