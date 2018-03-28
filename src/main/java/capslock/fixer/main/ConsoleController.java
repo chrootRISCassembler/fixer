@@ -16,22 +16,17 @@
 package capslock.fixer.main;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.WindowEvent;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 
-public class ConsoleController implements Initializable {
+public class ConsoleController{
 
     @FXML private TextField textField;
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb){
-    }
+
 
     void onCreate(WindowEvent event) {
 
