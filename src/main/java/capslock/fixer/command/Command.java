@@ -15,13 +15,21 @@
 
 package capslock.fixer.command;
 
+import capslock.fixer.main.ConsoleController;
+
 import java.util.List;
 
 public abstract class Command {
+    static ConsoleController outputConsole;
+
     private List<String> arg;
     Command(List<String> arg){
 
     }
 
     abstract public boolean run();
+
+    static public void setConsole(ConsoleController console){
+        outputConsole = console;
+    }
 }

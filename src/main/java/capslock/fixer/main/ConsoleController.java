@@ -15,6 +15,7 @@
 
 package capslock.fixer.main;
 
+import capslock.fixer.command.Command;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -31,6 +32,10 @@ public class ConsoleController{
     @FXML private TextField textField;
     @FXML private TextArea textArea;
 
+    public ConsoleController(){
+        Command.setConsole(this);
+    }
+
     void onCreate(WindowEvent event) {
 
     }
@@ -46,7 +51,7 @@ public class ConsoleController{
         ConsoleHandler.INST.commandRequest(rawInput);
     }
 
-    final void out(String message) {
+    public final void out(String message) {
         final StringBuilder stringBuilder = new StringBuilder(message + '\n');
 
         Stream.of(textArea.getText().split("\n"))
