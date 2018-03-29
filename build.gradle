@@ -145,8 +145,8 @@ task forceUpdateLib{
 }
 
 task cpFXML(type: Copy){
-    from 'src/main/resources/Console.fxml'
-    from 'src/main/resources/Console.css'
+    from 'src/main/resources'
+    exclude 'icon.xcf'
     into 'build/classes/java/main/capslock/fixer/main'
 }
 

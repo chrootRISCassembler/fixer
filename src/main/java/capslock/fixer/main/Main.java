@@ -20,6 +20,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import methg.commonlib.trivial_logger.LogLevel;
@@ -76,14 +77,15 @@ public class Main extends Application {
             final Scene scene=new Scene(root);
             stage.setScene(scene);
             stage.setTitle("fixer");
-
             ConsoleHandler.INST.setController(controller);
             Command.setHandler(ConsoleHandler.INST);
-
             Logger.INST.debug("Try to display Console window.");
-            stage.show();
         }catch (Exception ex){
             Logger.INST.logException(ex);
         }
+
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("icon.gif")));
+
+        stage.show();
     }
 }
