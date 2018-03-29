@@ -15,6 +15,7 @@
 
 package capslock.fixer.main;
 
+import capslock.fixer.command.Command;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -77,6 +78,7 @@ public class Main extends Application {
             stage.setTitle("fixer");
 
             ConsoleHandler.INST.setController(controller);
+            Command.setHandler(ConsoleHandler.INST);
 
             Logger.INST.debug("Try to display Console window.");
             stage.show();

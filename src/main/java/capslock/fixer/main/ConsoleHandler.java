@@ -21,14 +21,16 @@ import methg.commonlib.trivial_logger.Logger;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-enum ConsoleHandler {
+public enum ConsoleHandler {
     INST;
 
     private ConsoleController controller;
+    private Path CurrentDir = Paths.get("").toAbsolutePath();
     Path connectedJSON = null;
 
     final void commandRequest(String rawInput){
@@ -67,5 +69,13 @@ enum ConsoleHandler {
     }
     void setController(ConsoleController controller){
         this.controller = controller;
+    }
+
+    public final void setCurrentDir(Path dir){
+        CurrentDir = dir;
+    }
+
+    public final  Path getCurrentDir(){
+        return CurrentDir;
     }
 }

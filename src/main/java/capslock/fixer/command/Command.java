@@ -16,15 +16,18 @@
 package capslock.fixer.command;
 
 import capslock.fixer.main.ConsoleController;
+import capslock.fixer.main.ConsoleHandler;
 
 import java.util.List;
 
+
 public abstract class Command {
     static ConsoleController outputConsole;
+    static ConsoleHandler consoleHandler;
 
-    private List<String> arg;
+    List<String> arg;
     Command(List<String> arg){
-
+        this.arg = arg;
     }
 
     abstract public boolean run();
@@ -32,4 +35,5 @@ public abstract class Command {
     static public void setConsole(ConsoleController console){
         outputConsole = console;
     }
+    static public void setHandler(ConsoleHandler handler){consoleHandler = handler;}
 }
