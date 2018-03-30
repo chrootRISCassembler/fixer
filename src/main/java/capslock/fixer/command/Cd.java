@@ -2,6 +2,7 @@ package capslock.fixer.command;
 
 import methg.commonlib.trivial_logger.Logger;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
@@ -41,7 +42,13 @@ public class Cd extends Command {
             return false;
         }
 
-        consoleHandler.setCurrentDir(newDir);
+        try {
+            consoleHandler.setCurrentDir(newDir.normalize().toRealPath());
+        }catch (IOException | SecurityException ex){
+            outputConsole.out("パス解決に失敗しました.");
+            return false;
+        }
+
         outputConsole.out("cd to " + newDir);
         return true;
     }
