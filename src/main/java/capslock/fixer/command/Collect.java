@@ -1,5 +1,6 @@
 package capslock.fixer.command;
 
+import capslock.game_info.Game;
 import capslock.game_info.JSONDBReader;
 import capslock.game_info.JSONDBWriter;
 import methg.commonlib.trivial_logger.Logger;
@@ -22,11 +23,13 @@ public class Collect extends Command {
     @Override
     public boolean run(){
         if(!parse())return false;
-
-        Logger.INST.debug("OK parse");
-
         if(sourceGamesDir == null)sourceGamesDir = Paths.get(consoleHandler.getCurrentDir() + "/Games/");
         if(outputFilePath == null)outputFilePath = Paths.get(consoleHandler.getCurrentDir() + "/GamesInfo.json");
+
+        if(Files.notExists(sourceGamesDir)){
+            outputConsole.out("Games/ が見つかりません. cdするか-sオプションで指定してください.");
+            return false;
+        }
 
         outputConsole.out("Seek \"" + sourceGamesDir + " \" ...");
         try(final Stream<Path> lsStream = Files.list(sourceGamesDir)) {
@@ -53,8 +56,6 @@ public class Collect extends Command {
         }catch (IOException ex){
             Logger.INST.logException(ex);
         }catch (SecurityException ex){
-            Logger.INST.logException(ex);
-        }catch (IllegalArgumentException ex){
             Logger.INST.logException(ex);
         }
 
