@@ -95,6 +95,7 @@ gameInfo.libName = 'game_info'
 gameInfo.libVersion = '1.0.1-SNAPSHOT'
 
 dependencies {
+    compile group: 'org.json', name: 'json', version:  '+'
     testCompile 'org.codehaus.groovy:groovy-all:2.3.11'
 
     compile name: fileChecker.libName, version: fileChecker.libVersion
