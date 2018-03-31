@@ -12,7 +12,7 @@ public class Pwd extends Command {
 
     @Override
     public boolean run(){
-        outputConsole.out(consoleHandler.getCurrentDir().toString());
+        outputConsole.out(console.getCurrentDir().toString());
         return true;
     }
 }

@@ -48,7 +48,7 @@ public class ConsoleController{
         if(rawInput == null)return;
         textField.setText(null);
 
-        ConsoleHandler.INST.commandRequest(rawInput);
+        Console.INST.commandRequest(rawInput);
     }
 
     public final void out(String message) {

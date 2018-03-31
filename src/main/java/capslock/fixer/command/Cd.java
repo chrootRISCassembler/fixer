@@ -43,7 +43,7 @@ public class Cd extends Command {
         }
 
         try {
-            consoleHandler.setCurrentDir(newDir.normalize().toRealPath());
+            console.setCurrentDir(newDir.normalize().toRealPath());
         }catch (IOException | SecurityException ex){
             outputConsole.out("パス解決に失敗しました.");
             return false;

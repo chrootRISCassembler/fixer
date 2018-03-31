@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  * コンソールの実体
  * 様々な環境変数を保持する.
  */
-public enum ConsoleHandler {
+public enum Console {
     INST;
 
     private ConsoleController controller;

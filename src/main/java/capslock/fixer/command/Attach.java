@@ -36,7 +36,7 @@ public class Attach extends Command {
         try {
             json = Paths.get(arg.get(1));
         }catch (IndexOutOfBoundsException ex){
-            json = Paths.get(consoleHandler.getCurrentDir() + "/GamesInfo.json");
+            json = Paths.get(console.getCurrentDir() + "/GamesInfo.json");
         }
 
         final JSONDBReader reader;
@@ -50,7 +50,7 @@ public class Attach extends Command {
 
         final List<GameDocument> gameList = reader.getDocumentList();
         outputConsole.out(gameList.size() + "件のゲーム情報を読み込みました.");
-        consoleHandler.setDocumentList(gameList);
+        console.setDocumentList(gameList);
         return true;
     }
 }

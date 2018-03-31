@@ -21,8 +21,8 @@ public class Collect extends Command {
         super(arg);
         Logger.INST.debug("collect constructor called");
 
-        if(sourceGamesDir == null)sourceGamesDir = Paths.get(consoleHandler.getCurrentDir() + "/Games/");
-        if(outputFilePath == null)outputFilePath = Paths.get(consoleHandler.getCurrentDir() + "/GamesInfo.json");
+        if(sourceGamesDir == null)sourceGamesDir = Paths.get(console.getCurrentDir() + "/Games/");
+        if(outputFilePath == null)outputFilePath = Paths.get(console.getCurrentDir() + "/GamesInfo.json");
     }
 
     @Override
