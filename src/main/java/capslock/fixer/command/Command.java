@@ -15,14 +15,12 @@
 
 package capslock.fixer.command;
 
-import capslock.fixer.main.ConsoleController;
 import capslock.fixer.main.Console;
 
 import java.util.List;
 
 
 public abstract class Command {
-    static ConsoleController outputConsole;
     static Console console;
 
     List<String> arg;
@@ -32,9 +30,6 @@ public abstract class Command {
 
     abstract public boolean run();
 
-    static public void setConsole(ConsoleController console){
-        outputConsole = console;
-    }
-    static public void setHandler(Console handler){
+    static public void setConsole(Console handler){
         console = handler;}
 }

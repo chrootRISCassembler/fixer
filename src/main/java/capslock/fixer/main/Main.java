@@ -78,7 +78,7 @@ public class Main extends Application {
             stage.setScene(scene);
             stage.setTitle("fixer");
             Console.INST.setController(controller);
-            Command.setHandler(Console.INST);
+            Command.setConsole(Console.INST);
             Logger.INST.debug("Try to display Console window.");
         }catch (Exception ex){
             Logger.INST.logException(ex);
