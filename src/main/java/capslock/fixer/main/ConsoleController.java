@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 
 
 public class ConsoleController{
-    static private final int BUFFER_MAX = 20;
+    static private final int BUFFER_MAX = 50;
 
     @FXML private TextField textField;
     @FXML private TextArea textArea;
