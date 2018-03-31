@@ -27,6 +27,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * コンソールの実体
+ * 様々な環境変数を保持する.
+ */
 public enum ConsoleHandler {
     INST;
 
@@ -69,6 +73,14 @@ public enum ConsoleHandler {
 
         commandObject.run();
     }
+
+    /**
+     * コンソールに出力する.
+     */
+    final void out(String str){
+        controller.out(str);
+    }
+
     void setController(ConsoleController controller){
         this.controller = controller;
     }
