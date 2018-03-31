@@ -15,8 +15,13 @@
 
 package capslock.fixer.command;
 
+import capslock.game_info.GameDocument;
+import capslock.game_info.JSONDBReader;
 import methg.commonlib.trivial_logger.Logger;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class Attach extends Command {
@@ -27,7 +32,25 @@ public class Attach extends Command {
 
     @Override
     public boolean run() {
-        Logger.INST.debug("Attach run");
+        Path json;
+        try {
+            json = Paths.get(arg.get(1));
+        }catch (IndexOutOfBoundsException ex){
+            json = Paths.get(consoleHandler.getCurrentDir() + "/GamesInfo.json");
+        }
+
+        final JSONDBReader reader;
+        try {
+            reader = new JSONDBReader(json);
+        }catch (IOException ex){
+            Logger.INST.warn("Failed to read the JSON file.").logException(ex);
+            outputConsole.out("JSONファイルの読み込みに失敗しました.");
+            return false;
+        }
+
+        final List<GameDocument> gameList = reader.getDocumentList();
+        outputConsole.out(gameList.size() + "件のゲーム情報を読み込みました.");
+        consoleHandler.setDocumentList(gameList);
         return true;
     }
 }

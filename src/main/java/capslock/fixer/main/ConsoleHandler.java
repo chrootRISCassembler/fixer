@@ -16,6 +16,7 @@
 package capslock.fixer.main;
 
 import capslock.fixer.command.Command;
+import capslock.game_info.GameDocument;
 import methg.commonlib.trivial_logger.Logger;
 
 import java.lang.reflect.Constructor;
@@ -31,7 +32,8 @@ public enum ConsoleHandler {
 
     private ConsoleController controller;
     private Path CurrentDir = Paths.get("").toAbsolutePath();
-    Path connectedJSON = null;
+
+    private List<GameDocument> documentList;
 
     final void commandRequest(String rawInput){
         final List<String> wordList = Arrays.stream(rawInput.trim().split(" "))
@@ -77,5 +79,13 @@ public enum ConsoleHandler {
 
     public final  Path getCurrentDir(){
         return CurrentDir;
+    }
+
+    public final void setDocumentList(List<GameDocument> list){
+        documentList = list;
+    }
+
+    public final List<GameDocument> getDocumentList(){
+        return documentList;
     }
 }
