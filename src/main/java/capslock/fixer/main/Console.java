@@ -58,7 +58,7 @@ public enum Console {
             commandObject = commandConstructor.newInstance(wordList);
         }catch (ClassNotFoundException ex){
             Logger.INST.debug(wordList.get(0) + " class is not found");
-            controller.out(wordList.get(0) + "というコマンドは見つかりません.");
+            controller.printNewLine(wordList.get(0) + "というコマンドは見つかりません.");
             return;
 
         }catch (NoSuchMethodException ex){
@@ -77,8 +77,8 @@ public enum Console {
     /**
      * コンソールに出力する.
      */
-    final void out(String str){
-        controller.out(str);
+    public final void out(String str){
+        controller.printNewLine(str);
     }
 
     void setController(ConsoleController controller){

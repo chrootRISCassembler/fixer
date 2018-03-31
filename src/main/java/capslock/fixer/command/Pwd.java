@@ -1,5 +1,6 @@
 package capslock.fixer.command;
 
+import capslock.fixer.main.Console;
 import methg.commonlib.trivial_logger.Logger;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public class Pwd extends Command {
 
     @Override
     public boolean run(){
-        outputConsole.out(console.getCurrentDir().toString());
+        Console.INST.out(console.getCurrentDir().toString());
         return true;
     }
 }

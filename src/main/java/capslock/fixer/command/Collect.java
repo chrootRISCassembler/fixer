@@ -1,5 +1,6 @@
 package capslock.fixer.command;
 
+import capslock.fixer.main.Console;
 import capslock.game_info.JSONDBReader;
 import capslock.game_info.JSONDBWriter;
 import methg.commonlib.tiny_parser.BasicParser;
@@ -38,17 +39,17 @@ public class Collect extends Command {
         }
 
         if(Files.notExists(sourceGamesDir)){
-            outputConsole.out(sourceGamesDir + "が見つかりません.");
+            Console.INST.out(sourceGamesDir + "が見つかりません.");
             return false;
         }
 
         if(!parser.hasOption('f') && Files.exists(outputFilePath)){
-            outputConsole.out("既に" + outputFilePath + "が存在するため中止します.　" +
+            Console.INST.out("既に" + outputFilePath + "が存在するため中止します.　" +
                     "上書きを許可する場合は-fオプションを指定してください.");
             return false;
         }
 
-        outputConsole.out("Seek \"" + sourceGamesDir + " \" ...");
+        Console.INST.out("Seek \"" + sourceGamesDir + " \" ...");
         try(final Stream<Path> lsStream = Files.list(sourceGamesDir)) {
             final JSONDBWriter writer = new JSONDBWriter(outputFilePath);
 
@@ -59,13 +60,13 @@ public class Collect extends Command {
                         try {
                             return new JSONDBReader(path);
                         }catch (IllegalArgumentException | IOException ex){
-                            outputConsole.out(" * Failed to read " + path + "\t[NG]");
+                            Console.INST.out(" * Failed to read " + path + "\t[NG]");
                             return null;
                         }
                     })
                     .filter(Objects::nonNull)
                     .map(reader -> reader.getDocumentList().get(0))
-                    .peek(doc -> outputConsole.out("* Got the signature " + doc.getName() + "\t[OK]"))
+                    .peek(doc -> Console.INST.out("* Got the signature " + doc.getName() + "\t[OK]"))
                     .forEach(writer::add);
 
             writer.flush();
@@ -76,14 +77,14 @@ public class Collect extends Command {
             Logger.INST.logException(ex);
         }
 
-        outputConsole.out("Write info to \"" + outputFilePath + "\" done.");
+        Console.INST.out("Write info to \"" + outputFilePath + "\" done.");
         return true;
     }
 
     private void displayHelp(){
-        outputConsole.out("使い方 : collect [オプション]");
-        outputConsole.out("\t-o FILE\t出力するファイル名をGamesInfo.jsonではなくFILEにする.");
-        outputConsole.out("\t-s DIR\tGames/ディレクトリの代わりにDIRから各々のゲームの.signature.jsonを読み取る.");
-        outputConsole.out("\t-f GamesInfo.jsonが存在する場合上書きする.");
+        Console.INST.out("使い方 : collect [オプション]");
+        Console.INST.out("\t-o FILE\t出力するファイル名をGamesInfo.jsonではなくFILEにする.");
+        Console.INST.out("\t-s DIR\tGames/ディレクトリの代わりにDIRから各々のゲームの.signature.jsonを読み取る.");
+        Console.INST.out("\t-f GamesInfo.jsonが存在する場合上書きする.");
     }
 }

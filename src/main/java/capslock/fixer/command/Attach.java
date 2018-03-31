@@ -15,6 +15,7 @@
 
 package capslock.fixer.command;
 
+import capslock.fixer.main.Console;
 import capslock.game_info.GameDocument;
 import capslock.game_info.JSONDBReader;
 import methg.commonlib.trivial_logger.Logger;
@@ -44,12 +45,12 @@ public class Attach extends Command {
             reader = new JSONDBReader(json);
         }catch (IOException ex){
             Logger.INST.warn("Failed to read the JSON file.").logException(ex);
-            outputConsole.out("JSONファイルの読み込みに失敗しました.");
+            Console.INST.out("JSONファイルの読み込みに失敗しました.");
             return false;
         }
 
         final List<GameDocument> gameList = reader.getDocumentList();
-        outputConsole.out(gameList.size() + "件のゲーム情報を読み込みました.");
+        Console.INST.out(gameList.size() + "件のゲーム情報を読み込みました.");
         console.setDocumentList(gameList);
         return true;
     }

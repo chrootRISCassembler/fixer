@@ -51,7 +51,7 @@ public class ConsoleController{
         Console.INST.commandRequest(rawInput);
     }
 
-    public final void out(String message) {
+    final void printNewLine(String message) {
         final StringBuilder stringBuilder = new StringBuilder(message + '\n');
 
         Stream.of(textArea.getText().split("\n"))
