@@ -1,8 +1,9 @@
 package capslock.fixer.command;
 
-import capslock.game_info.Game;
 import capslock.game_info.JSONDBReader;
 import capslock.game_info.JSONDBWriter;
+import methg.commonlib.tiny_parser.BasicParser;
+import methg.commonlib.tiny_parser.Parser;
 import methg.commonlib.trivial_logger.Logger;
 
 import java.io.IOException;
@@ -14,20 +15,36 @@ import java.util.stream.Stream;
 public class Collect extends Command {
     private Path outputFilePath;
     private Path sourceGamesDir;
+    private boolean forceWriteOver = false;
 
     public Collect(List<String> arg){
         super(arg);
         Logger.INST.debug("collect constructor called");
+
+        if(sourceGamesDir == null)sourceGamesDir = Paths.get(consoleHandler.getCurrentDir() + "/Games/");
+        if(outputFilePath == null)outputFilePath = Paths.get(consoleHandler.getCurrentDir() + "/GamesInfo.json");
     }
 
     @Override
     public boolean run(){
-        if(!parse())return false;
-        if(sourceGamesDir == null)sourceGamesDir = Paths.get(consoleHandler.getCurrentDir() + "/Games/");
-        if(outputFilePath == null)outputFilePath = Paths.get(consoleHandler.getCurrentDir() + "/GamesInfo.json");
+        final Parser parser = new BasicParser(arg);
+
+        if(parser.hasOption('s')){
+            sourceGamesDir = Paths.get(parser.getOperand('s'));
+        }
+
+        if(parser.hasOption('o')){
+            outputFilePath = Paths.get(parser.getOperand('o'));
+        }
 
         if(Files.notExists(sourceGamesDir)){
-            outputConsole.out("Games/ が見つかりません. cdするか-sオプションで指定してください.");
+            outputConsole.out(sourceGamesDir + "が見つかりません.");
+            return false;
+        }
+
+        if(!parser.hasOption('f') && Files.exists(outputFilePath)){
+            outputConsole.out("既に" + outputFilePath + "が存在するため中止します.　" +
+                    "上書きを許可する場合は-fオプションを指定してください.");
             return false;
         }
 
@@ -40,15 +57,15 @@ public class Collect extends Command {
                     .peek(path -> System.err.println(path))
                     .map(path -> {
                         try {
-                           return  new JSONDBReader(path);
+                            return new JSONDBReader(path);
                         }catch (IllegalArgumentException | IOException ex){
-                            outputConsole.out("Failed to read " + path);
+                            outputConsole.out(" * Failed to read " + path + "\t[NG]");
                             return null;
                         }
                     })
                     .filter(Objects::nonNull)
-                    .peek(path -> outputConsole.out("Got signature from \"" + path + '\"'))
                     .map(reader -> reader.getDocumentList().get(0))
+                    .peek(doc -> outputConsole.out("* Got the signature " + doc.getName() + "\t[OK]"))
                     .forEach(writer::add);
 
             writer.flush();
@@ -63,83 +80,10 @@ public class Collect extends Command {
         return true;
     }
 
-    private boolean parse(){
-        switch (arg.size()){
-            case 1:
-                return true;
-            case 3:
-            case 5:
-                boolean hasOptionO = false;
-                boolean hasOptionS = false;
-                boolean ret;
-
-                switch (arg.get(1)){
-                    case "-o":
-                        ret = optionO(arg.get(2));
-                        hasOptionO = true;
-                        break;
-                    case "-s":
-                        ret = optionS(arg.get(2));
-                        hasOptionS = true;
-                        break;
-                    default:
-                        outputConsole.out("引数が不正です.");
-                        displayHelp();
-                        return false;
-                }
-
-                if(arg.size() == 3)return ret;
-                if(!ret)return false;
-
-                switch (arg.get(3)){
-                        case "-o":
-                            if(hasOptionO){
-                                outputConsole.out("同じオプションが指定されています.");
-                                return false;
-                            }
-                            return optionO(arg.get(5));
-                        case "-s":
-                            if(hasOptionS){
-                                outputConsole.out("同じオプションが指定されています.");
-                                return false;
-                            }
-                            return optionS(arg.get(5));
-                        default:
-                            outputConsole.out("引数が不正です.");
-                            displayHelp();
-                            return false;
-
-                }
-        }
-
-        outputConsole.out("引数の数が不正です.");
-        displayHelp();
-        return false;
-    }
-
     private void displayHelp(){
         outputConsole.out("使い方 : collect [オプション]");
         outputConsole.out("\t-o FILE\t出力するファイル名をGamesInfo.jsonではなくFILEにする.");
         outputConsole.out("\t-s DIR\tGames/ディレクトリの代わりにDIRから各々のゲームの.signature.jsonを読み取る.");
-    }
-
-    private boolean optionO(String operand){
-        try{
-            outputFilePath = Paths.get(operand);
-            return true;
-        }catch (InvalidPathException ex){
-            outputConsole.out("-o オプション : " + operand  + " は有効なパスではありません.");
-            return false;
-        }
-    }
-
-    private boolean optionS(String operand){
-        try{
-            sourceGamesDir = Paths.get(operand);
-            return true;
-        }catch (InvalidPathException ex){
-            outputConsole.out("-o オプション : " + operand  + " は有効なパスではありません.");
-            return false;
-        }
+        outputConsole.out("\t-f GamesInfo.jsonが存在する場合上書きする.");
     }
 }
