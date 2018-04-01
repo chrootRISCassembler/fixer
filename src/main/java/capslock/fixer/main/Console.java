@@ -36,8 +36,15 @@ public enum Console {
     private Path CurrentDir = Paths.get("").toAbsolutePath();
 
     private List<GameDocument> documentList;
+    private boolean isInteractiveMode = false;
+    private Command commandInstance;
 
     final void commandRequest(String rawInput){
+        if(isInteractiveMode){
+            commandInstance.readLine(rawInput);
+            return;
+        }
+
         final int firstSpace = rawInput.indexOf(' ');
         final String command = firstSpace == -1 ? rawInput : rawInput.substring(0, firstSpace);
 
@@ -51,11 +58,9 @@ public enum Console {
         classNameBuilder.append(Character.toUpperCase(command.charAt(0)));
         classNameBuilder.append(command.substring(1));
 
-        final Command commandObject;
-
         try {
             Class<? extends Command> commandClass = Class.forName(classNameBuilder.toString()).asSubclass(Command.class);
-            commandObject = commandClass.newInstance();
+            commandInstance = commandClass.newInstance();
         }catch (ClassNotFoundException ex) {
             Logger.INST.debug(command + " class is not found");
             controller.printNewLine(command + "というコマンドは見つかりません.");
@@ -66,7 +71,12 @@ public enum Console {
             return;
         }
 
-        commandObject.run(rawInput);
+        commandInstance.run(rawInput);
+
+        if(!isInteractiveMode){
+            //GCに回収されるように参照を外す.
+            commandInstance = null;
+        }
     }
 
     /**
@@ -94,5 +104,12 @@ public enum Console {
 
     public final List<GameDocument> getDocumentList(){
         return documentList;
+    }
+
+    public final void enableInteractive(){
+        isInteractiveMode = true;
+    }
+    public final void disableInteractive(){
+        isInteractiveMode = false;
     }
 }

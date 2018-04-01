@@ -22,4 +22,8 @@ public abstract class Command {
     static public void setConsole(Console handler){ console = handler;}
 
     abstract public boolean run(String line);
+
+    public void readLine(String line){
+        System.err.println("This command doesn't support readLine() method.");
+    }
 }
