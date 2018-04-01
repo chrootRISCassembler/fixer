@@ -40,7 +40,6 @@ public class ConsoleController{
         if (event.getCode() != KeyCode.ENTER)return;
 
         final String rawInput = textField.getText();
-        if(rawInput == null)return;
         textField.setText(null);
 
         Console.INST.commandRequest(rawInput);

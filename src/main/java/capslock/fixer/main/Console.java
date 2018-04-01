@@ -45,6 +45,8 @@ public enum Console {
             return;
         }
 
+        if(rawInput == null || rawInput.trim().isEmpty())return;
+
         final int firstSpace = rawInput.indexOf(' ');
         final String command = firstSpace == -1 ? rawInput : rawInput.substring(0, firstSpace);
 
