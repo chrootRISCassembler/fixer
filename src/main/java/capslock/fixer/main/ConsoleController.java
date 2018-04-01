@@ -42,7 +42,7 @@ public class ConsoleController{
         final String rawInput = textField.getText();
         textField.setText(null);
 
-        Console.INST.commandRequest(rawInput);
+        Console.INST.commandRequest(rawInput == null ? "" : rawInput);
     }
 
     final void printNewLine(String message) {
