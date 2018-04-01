@@ -17,19 +17,9 @@ package capslock.fixer.command;
 
 import capslock.fixer.main.Console;
 
-import java.util.List;
-
-
 public abstract class Command {
     static Console console;
+    static public void setConsole(Console handler){ console = handler;}
 
-    List<String> arg;
-    Command(List<String> arg){
-        this.arg = arg;
-    }
-
-    abstract public boolean run();
-
-    static public void setConsole(Console handler){
-        console = handler;}
+    abstract public boolean run(String line);
 }

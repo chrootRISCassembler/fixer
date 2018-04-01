@@ -19,8 +19,6 @@ import capslock.fixer.command.Command;
 import capslock.game_info.GameDocument;
 import methg.commonlib.trivial_logger.Logger;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -40,38 +38,35 @@ public enum Console {
     private List<GameDocument> documentList;
 
     final void commandRequest(String rawInput){
-        final List<String> wordList = Arrays.stream(rawInput.trim().split(" "))
-                .filter(str -> !str.isEmpty())
-                .collect(Collectors.toList());
+        final int firstSpace = rawInput.indexOf(' ');
+        final String command = firstSpace == -1 ? rawInput : rawInput.substring(0, firstSpace);
 
-        if(wordList.isEmpty())return;
+//        final List<String> wordList = Arrays.stream(rawInput.trim().split(" "))
+//                .filter(str -> !str.isEmpty())
+//                .collect(Collectors.toList());
+
+        //if(wordList.isEmpty())return;
 
         final StringBuilder classNameBuilder = new StringBuilder("capslock.fixer.command.");
-        classNameBuilder.append(Character.toUpperCase(wordList.get(0).charAt(0)));
-        classNameBuilder.append(wordList.get(0).substring(1));
+        classNameBuilder.append(Character.toUpperCase(command.charAt(0)));
+        classNameBuilder.append(command.substring(1));
 
         final Command commandObject;
 
         try {
             Class<? extends Command> commandClass = Class.forName(classNameBuilder.toString()).asSubclass(Command.class);
-            Constructor<? extends Command> commandConstructor = commandClass.getDeclaredConstructor(List.class);
-            commandObject = commandConstructor.newInstance(wordList);
-        }catch (ClassNotFoundException ex){
-            Logger.INST.debug(wordList.get(0) + " class is not found");
-            controller.printNewLine(wordList.get(0) + "というコマンドは見つかりません.");
+            commandObject = commandClass.newInstance();
+        }catch (ClassNotFoundException ex) {
+            Logger.INST.debug(command + " class is not found");
+            controller.printNewLine(command + "というコマンドは見つかりません.");
             return;
-
-        }catch (NoSuchMethodException ex){
-            ex.printStackTrace();
-            System.err.println("constructor err");
-            return;
-        }catch (InstantiationException | IllegalAccessException | InvocationTargetException ex){
+        } catch (InstantiationException | IllegalAccessException ex){
             ex.printStackTrace();
             System.err.println("new fail");
             return;
         }
 
-        commandObject.run();
+        commandObject.run(rawInput);
     }
 
     /**

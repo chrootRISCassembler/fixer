@@ -11,14 +11,12 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class Cd extends Command {
-    public Cd(List<String> arg){
-        super(arg);
-        Logger.INST.debug("cd constructor called");
-    }
 
     @Override
-    public boolean run(){
-        if(arg.size() != 2){
+    public boolean run(String line){
+        final String[] wordArray = line.trim().split(" ");
+
+        if(wordArray.length != 2){
             Console.INST.out("引数が不正です.");
             Console.INST.out("使い方 : cd ディレクトリ");
             return false;
@@ -27,19 +25,19 @@ public class Cd extends Command {
         final Path newDir;
 
         try {
-            newDir = Paths.get(arg.get(1));
+            newDir = Paths.get(wordArray[1]);
         }catch (InvalidPathException ex){
-            Console.INST.out(arg.get(1) + " はパスではありません.");
+            Console.INST.out(wordArray[1] + " はパスではありません.");
             return false;
         }
 
         if(Files.notExists(newDir)){
-            Console.INST.out(arg.get(1) + " のようなパスは存在しません.");
+            Console.INST.out(wordArray[1] + " のようなパスは存在しません.");
             return false;
         }
 
         if(!Files.isDirectory(newDir)){
-            Console.INST.out(arg.get(1) + " はディレクトリではありません.");
+            Console.INST.out(wordArray[1] + " はディレクトリではありません.");
             return false;
         }
 

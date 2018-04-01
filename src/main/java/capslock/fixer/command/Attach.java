@@ -26,16 +26,14 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class Attach extends Command {
-    public Attach(List<String> arg){
-        super(arg);
-        Logger.INST.debug("Attach constructor");
-    }
 
     @Override
-    public boolean run() {
+    public boolean run(String line) {
+        final String[] wordArray = line.trim().split(" ");
+
         Path json;
         try {
-            json = Paths.get(arg.get(1));
+            json = Paths.get(wordArray[1]);
         }catch (IndexOutOfBoundsException ex){
             json = Paths.get(console.getCurrentDir() + "/GamesInfo.json");
         }

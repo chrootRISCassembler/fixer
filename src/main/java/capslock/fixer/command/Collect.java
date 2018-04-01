@@ -9,8 +9,9 @@ import methg.commonlib.trivial_logger.Logger;
 
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Collect extends Command {
@@ -18,17 +19,16 @@ public class Collect extends Command {
     private Path sourceGamesDir;
     private boolean forceWriteOver = false;
 
-    public Collect(List<String> arg){
-        super(arg);
-        Logger.INST.debug("collect constructor called");
-
+    public Collect(){
         if(sourceGamesDir == null)sourceGamesDir = Paths.get(console.getCurrentDir() + "/Games/");
         if(outputFilePath == null)outputFilePath = Paths.get(console.getCurrentDir() + "/GamesInfo.json");
     }
 
     @Override
-    public boolean run(){
-        final Parser parser = new BasicParser(arg);
+    public boolean run(String line){
+        final Parser parser = new BasicParser(Arrays.stream(line.trim().split(" "))
+                .filter(str -> !str.isEmpty())
+                .collect(Collectors.toList()));
 
         if(parser.hasOption('s')){
             sourceGamesDir = Paths.get(parser.getOperand('s'));

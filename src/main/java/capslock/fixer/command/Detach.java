@@ -15,18 +15,10 @@
 
 package capslock.fixer.command;
 
-import methg.commonlib.trivial_logger.Logger;
-
-import java.util.List;
-
 public class Detach extends Command {
-    public Detach(List<String> arg){
-        super(arg);
-        Logger.INST.debug("Detach constructor");
-    }
 
     @Override
-    public boolean run(){
+    public boolean run(String line){
         return true;
     }
 }
