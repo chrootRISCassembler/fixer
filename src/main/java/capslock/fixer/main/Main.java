@@ -15,8 +15,9 @@
 
 package capslock.fixer.main;
 
-import methg.commonlib.trivial_logger.LogLevel;
-import methg.commonlib.trivial_logger.Logger;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main{
 
@@ -25,13 +26,13 @@ public class Main{
      * @param args コマンドライン引数
      */
     public static void main(String[] args) {
+        System.out.println("fixer - GameInfo edit tool");
 
-        Logger.INST.setCurrentLogLevel(LogLevel.DEBUG);
-
-        Logger.INST.info("fixer started.");
-
-
-        Logger.INST.info("fixer terminated.");
-        Logger.INST.flush();
+        try (final var stream = new BufferedReader(new InputStreamReader(
+                Main.class.getResourceAsStream("BuildInfo.txt")))){
+            stream.lines().forEach(System.out::println);
+        }catch (IOException ex){
+            ex.printStackTrace();
+        }
     }
 }

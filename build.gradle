@@ -123,6 +123,13 @@ processResources{
     }
 }
 
+task cpBuildInfo(type: Copy, dependsOn: processResources){
+    from processResources.destinationDir.path + '/BuildInfo.txt'
+    into 'build/classes/java/main/capslock/fixer/main'
+}
+
+run.dependsOn cpBuildInfo
+
 compileJava.doFirst {
     def libDir = Paths.get(System.getProperty("user.dir") + "/lib/")
     if (Files.notExists(libDir)) {
