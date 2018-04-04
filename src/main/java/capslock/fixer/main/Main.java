@@ -15,20 +15,10 @@
 
 package capslock.fixer.main;
 
-import capslock.fixer.command.Command;
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
-
 import methg.commonlib.trivial_logger.LogLevel;
 import methg.commonlib.trivial_logger.Logger;
 
-import java.io.IOException;
-
-public class Main extends Application {
+public class Main{
 
     /**
      * エントリポイント
@@ -40,52 +30,8 @@ public class Main extends Application {
 
         Logger.INST.info("fixer started.");
 
-        launch(args);
 
         Logger.INST.info("fixer terminated.");
         Logger.INST.flush();
-    }
-
-
-    @Override
-    public void start(Stage stage) {
-        Logger.INST.debug("Application#start called.");
-
-        final FXMLLoader loader;
-        try{
-            loader = new FXMLLoader(getClass().getResource("Console.fxml"));
-        }catch(Exception ex){
-            Logger.INST.critical("Failed to get resource.");
-            Logger.INST.logException(ex);
-            return;
-        }
-
-        final Parent root;
-
-        try {
-            root = loader.load();
-        } catch (IOException ex) {
-            Logger.INST.critical("Failed to load Console.fxml");
-            Logger.INST.logException(ex);
-            return;
-        }
-
-
-        try {
-            final ConsoleController controller = (ConsoleController) loader.getController();
-
-            final Scene scene=new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("fixer");
-            Console.INST.setController(controller);
-            Command.setConsole(Console.INST);
-            Logger.INST.debug("Try to display Console window.");
-        }catch (Exception ex){
-            Logger.INST.logException(ex);
-        }
-
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("icon.gif")));
-
-        stage.show();
     }
 }

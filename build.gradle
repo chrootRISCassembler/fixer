@@ -114,8 +114,6 @@ tasks.withType(JavaCompile){
 }
 
 processResources{
-    exclude '*.fxml'
-
     doLast {
         def buildInfoFile = new File(processResources.destinationDir.path + '/BuildInfo.txt')
         buildInfoFile.bytes = []
@@ -151,16 +149,6 @@ task forceUpdateLib{
         gameInfo.downloadLibJar()
         tinyParser.downloadLibJar()
     }
-}
-
-task cpFXML(type: Copy){
-    from 'src/main/resources'
-    exclude 'icon.xcf'
-    into 'build/classes/java/main/capslock/fixer/main'
-}
-
-run {
-    dependsOn cpFXML
 }
 
 javadoc {
