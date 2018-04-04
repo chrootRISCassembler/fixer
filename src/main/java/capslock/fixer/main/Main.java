@@ -15,9 +15,13 @@
 
 package capslock.fixer.main;
 
+import capslock.fixer.command.Command;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Scanner;
 
 public class Main{
 
@@ -34,5 +38,41 @@ public class Main{
         }catch (IOException ex){
             ex.printStackTrace();
         }
+
+        //System.console()はIDEからつかえないことが多い nullを返される
+
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.print('>');
+            System.out.flush();
+            final String line = scanner.nextLine();
+            if ("quit".equals(line)) {
+                System.out.println("Bye.");
+                break;
+            }
+
+            final var classNameBuilder = new StringBuilder("capslock.fixer.command.");
+            classNameBuilder.append(Character.toUpperCase(line.charAt(0)));
+            classNameBuilder.append(line.substring(1));
+
+            final Command commandInstance;
+
+            try {
+                Class<? extends Command> commandClass = Class.forName(classNameBuilder.toString()).asSubclass(Command.class);
+                commandInstance = commandClass.getDeclaredConstructor().newInstance();
+            }catch (ClassNotFoundException ex){
+                System.err.println(line + " command isn't found.");
+                continue;
+            }catch (NoSuchMethodException ex){
+                System.err.println("CRITICAL : Constructor isn't found.");
+                continue;
+            }catch (InstantiationException | IllegalAccessException | InvocationTargetException ex){
+                System.err.println("CRITICAL : new failed.");
+                continue;
+            }
+
+            commandInstance.run(line);
+        }
+        scanner.close();
     }
 }
