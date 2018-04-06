@@ -41,7 +41,8 @@ public class Main{
 
         //System.console()はIDEからつかえないことが多い nullを返される
 
-        Scanner scanner = new Scanner(System.in);
+        final var scanner = new Scanner(System.in);
+        Command.setScanner(scanner);
         while (true) {
             System.out.print('>');
             System.out.flush();

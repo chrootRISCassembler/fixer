@@ -19,6 +19,7 @@ import capslock.game_info.GameDocument;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * コマンドの共通基底クラス.
@@ -37,10 +38,16 @@ public abstract class Command {
      */
     static Path gamesDir;
 
+    static Scanner scanner;
+
     /**
      * コマンドの実体
      * @param line 一行分の入力
      * @return 成功時 {@code true}, 失敗時 {@code false}
      */
     public abstract boolean run(String line);
+
+    public static void setScanner(Scanner scanner) {
+        Command.scanner = scanner;
+    }
 }
