@@ -51,9 +51,16 @@ public class Main{
                 break;
             }
 
+            final String trimmed = line.trim();
+
+            if(trimmed.isEmpty())continue;
+
+            final int firstSpace = trimmed.indexOf(' ');
+            final String firstWord = firstSpace == -1 ? trimmed : trimmed.substring(0, firstSpace);
+
             final var classNameBuilder = new StringBuilder("capslock.fixer.command.");
-            classNameBuilder.append(Character.toUpperCase(line.charAt(0)));
-            classNameBuilder.append(line.substring(1));
+            classNameBuilder.append(Character.toUpperCase(firstWord.charAt(0)));
+            classNameBuilder.append(firstWord.substring(1));
 
             final Command commandInstance;
 
@@ -61,7 +68,7 @@ public class Main{
                 Class<? extends Command> commandClass = Class.forName(classNameBuilder.toString()).asSubclass(Command.class);
                 commandInstance = commandClass.getDeclaredConstructor().newInstance();
             }catch (ClassNotFoundException ex){
-                System.err.println(line + " command isn't found.");
+                System.err.println(firstWord + " command isn't found.");
                 continue;
             }catch (NoSuchMethodException ex){
                 System.err.println("CRITICAL : Constructor isn't found.");
@@ -71,7 +78,7 @@ public class Main{
                 continue;
             }
 
-            commandInstance.run(line);
+            commandInstance.run(trimmed);
         }
         scanner.close();
     }

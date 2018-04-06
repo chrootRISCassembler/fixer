@@ -15,10 +15,28 @@
 
 package capslock.fixer.command;
 
+import capslock.game_info.GameDocument;
+
+import java.nio.file.Path;
+import java.util.List;
+
 /**
  * コマンドの共通基底クラス.
  */
 public abstract class Command {
+    /**
+     * 現在のゲーム情報
+     */
+    List<GameDocument> gameList;
+    /**
+     * アタッチしているJSONファイル
+     */
+    Path jsonDBFile;
+    /**
+     * アタッチしているGames/ディレクトリ
+     */
+    Path gmaesDir;
+
     /**
      * コマンドの実体
      * @param line 一行分の入力

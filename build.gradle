@@ -97,7 +97,7 @@ gameInfo.libVersion = '1.0.2-SNAPSHOT'
 
 final tinyParser = new PrivateLibDownload()
 tinyParser.libName = 'TinyParser'
-tinyParser.libVersion = '1.0.0-SNAPSHOT'
+tinyParser.libVersion = '2.0.0-SNAPSHOT'
 
 dependencies {
     compile group: 'org.json', name: 'json', version:  '+'
