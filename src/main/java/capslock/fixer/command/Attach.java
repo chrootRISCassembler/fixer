@@ -15,19 +15,18 @@
 
 package capslock.fixer.command;
 
-import capslock.game_info.GameDocument;
 import capslock.game_info.JSONDBReader;
 import methg.commonlib.tiny_parser.BasicParser;
 import methg.commonlib.tiny_parser.Parser;
 import methg.commonlib.tiny_parser.Parsers;
-import methg.commonlib.trivial_logger.Logger;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * GamesInfo.jsonをJSONDB,Games/をゲームディレクトリとして接続(アタッチ)する.
@@ -46,20 +45,24 @@ public final class Attach extends Command {
     public boolean run(String line) {
         if(!parse(line))return false;
 
-        final JSONDBReader reader;
-        try {
-            reader = new JSONDBReader(json);
-        }catch (IOException ex){
-            System.err.println(json + "の読み込み中に例外が発生しました.");
-            ex.printStackTrace();
-            return false;
+        if(Files.notExists(json)){
+            System.err.println(json + "が見つからないためゲーム情報のロードをパスします.");
+            gameList = new ArrayList<>();
+        }else {
+            final JSONDBReader reader;
+            try {
+                reader = new JSONDBReader(json);
+            }catch (IOException ex){
+                System.err.println(json + "の読み込み中に例外が発生しました.");
+                ex.printStackTrace();
+                return false;
+            }
+            gameList = reader.getDocumentList();
+            System.out.println(gameList.size() + "game document detected.");
         }
 
-        gameList = reader.getDocumentList();
-        System.out.println(gameList.size() + "game document detected.");
-
         jsonDBFile = json;
-        super.gmaesDir = this.gamesDir;
+        Command.gamesDir = this.gamesDir;
         return true;
     }
 

@@ -27,15 +27,15 @@ public abstract class Command {
     /**
      * 現在のゲーム情報
      */
-    List<GameDocument> gameList;
+    static List<GameDocument> gameList;
     /**
      * アタッチしているJSONファイル
      */
-    Path jsonDBFile;
+    static Path jsonDBFile;
     /**
      * アタッチしているGames/ディレクトリ
      */
-    Path gmaesDir;
+    static Path gamesDir;
 
     /**
      * コマンドの実体
