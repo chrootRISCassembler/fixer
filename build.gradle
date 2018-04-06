@@ -87,10 +87,6 @@ final fileChecker = new PrivateLibDownload()
 fileChecker.libName = "FileChecker"
 fileChecker.libVersion = "1.1.1-SNAPSHOT"
 
-final trivialLogger = new PrivateLibDownload()
-trivialLogger.libName = "TrivialLogger"
-trivialLogger.libVersion = "1.1.1-SNAPSHOT"
-
 final gameInfo = new PrivateLibDownload()
 gameInfo.libName = 'game_info'
 gameInfo.libVersion = '1.0.2-SNAPSHOT'
@@ -104,7 +100,6 @@ dependencies {
     testCompile 'org.codehaus.groovy:groovy-all:2.4.15'
 
     compile name: fileChecker.libName, version: fileChecker.libVersion
-    compile name: trivialLogger.libName, version: trivialLogger.libVersion
     compile name: gameInfo.libName, version: gameInfo.libVersion
     compile name: tinyParser.libName, version: tinyParser.libVersion
 }
@@ -137,7 +132,6 @@ compileJava.doFirst {
     }
 
     fileChecker.downloadIfNotExist()
-    trivialLogger.downloadIfNotExist()
     gameInfo.downloadIfNotExist()
     tinyParser.downloadIfNotExist()
 }
@@ -152,7 +146,6 @@ task forceUpdateLib{
         }
 
         fileChecker.downloadLibJar()
-        trivialLogger.downloadLibJar()
         gameInfo.downloadLibJar()
         tinyParser.downloadLibJar()
     }
