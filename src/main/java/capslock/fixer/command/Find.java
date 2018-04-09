@@ -15,33 +15,22 @@
 
 package capslock.fixer.command;
 
+import capslock.game_info.Field;
+
+import java.util.EnumSet;
+
 public class Find extends Command {
     @Override
     public boolean run(String line) {
         if(line.equals("find")){
             for (final var game : gameList){
-                final var str = new StringBuilder("{")
-                        .append("UUID : ")
-                        .append(game.getUUID())
-                        .append(", exe : ")
-                        .append(game.getExe())
-                        .append(", name : ")
-                        .append(game.getName())
-                        .append(", desc : ")
-                        .append(game.getDesc())
-                        .append(", panel : ")
-                        .append(game.getPanel())
-                        .append(", movieList : ")
-                        .append(game.getMovieList())
-                        .append(", imageList : ")
-                        .append(game.getImageList())
-                        .append(", gameID : ")
-                        .append(game.getGameID())
-                        .append(", lastMod : ")
-                        .append(game.getLastMod())
-                        .append('}')
-                        .toString();
-                System.out.println(str);
+                System.out.println(game.query(EnumSet.allOf(Field.class)));
+            }
+        }else{
+            final var firstSpaceIndex = line.indexOf(' ');
+            System.out.println(line.substring(firstSpaceIndex));
+            for(final var game : gameList){
+                System.out.println(game.query(line.substring(firstSpaceIndex)));
             }
         }
         return true;
