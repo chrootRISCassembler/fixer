@@ -88,8 +88,8 @@ fileChecker.libName = "FileChecker"
 fileChecker.libVersion = "1.1.1-SNAPSHOT"
 
 final gameInfo = new PrivateLibDownload()
-gameInfo.libName = 'game_info'
-gameInfo.libVersion = '1.0.2-SNAPSHOT'
+gameInfo.libName = 'GameInfo'
+gameInfo.libVersion = '2.1.1-SNAPSHOT'
 
 final tinyParser = new PrivateLibDownload()
 tinyParser.libName = 'TinyParser'
