@@ -35,8 +35,8 @@ import java.util.Arrays;
  * </p>
  */
 public final class Attach extends Command {
-    private static final String DEFAULT_JSONDB_FILE_NAME = "GamesInfo.json";
-    private static final String DEFAULT_GAMES_DIR_NAME = "Games/";
+    private static final String DEFAULT_JSONDB_FILE_NAME = "./GamesInfo.json";
+    private static final String DEFAULT_GAMES_DIR_NAME = "./Games/";
 
     private Path json;
     private Path gamesDir;
