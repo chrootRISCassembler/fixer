@@ -50,4 +50,23 @@ public abstract class Command {
     public static void setScanner(Scanner scanner) {
         Command.scanner = scanner;
     }
+
+    /**
+     * ユーザーにy/nの入力を求める.
+     * @return ユーザーがyを入手すると {@code true}, nを入手すると{@code false}が返る.
+     */
+    static boolean demandYN(){
+        while (true){
+            System.out.println("(y/n)>");
+            final String line = Command.scanner.nextLine();
+            switch (line){
+                case "y":
+                case "Y":
+                    return true;
+                case "n":
+                case "N":
+                    return false;
+            }
+        }
+    }
 }
