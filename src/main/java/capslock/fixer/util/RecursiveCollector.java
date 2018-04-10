@@ -7,9 +7,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
 /**
@@ -20,7 +19,7 @@ import java.util.stream.Stream;
  * </p>
  */
 public class RecursiveCollector {
-    Map<GameDocument, Path> collectedGame = new HashMap<>();
+    private final Map<GameDocument, Path> collectedGame;
 
     static private final class Tuple<X, Y>{
         private final X x;
@@ -35,26 +34,37 @@ public class RecursiveCollector {
      * 唯一のコンストラクタ.
      * @param gamesDir Gamesディレクトリか,それに相当するディレクトリ.
      */
-    public RecursiveCollector(Path gamesDir){
+    public RecursiveCollector(Path gamesDir) throws IOException, SecurityException{
+        final Map<GameDocument, Path> modifiableMap = new HashMap<>();
+
         try(final Stream<Path> lsStream = Files.list(gamesDir)) {
             lsStream.parallel()
                     .map(gameRootDir -> {
                         try {
-                            return new Tuple<>(gameRootDir, new JSONDBReader(Paths.get(gameRootDir + "/.signature.json")));
+                            return new Tuple<>(new JSONDBReader(Paths.get(gameRootDir + "/.signature.json")), gameRootDir);
                         }catch (IllegalArgumentException | IOException ex){
                             System.err.println(" * Failed to read " + gameRootDir + "\t[NG]");
                             return null;
                         }
                     })
                     .filter(Objects::nonNull)
-                    .map(tuple -> new Tuple<>(tuple.x, tuple.y.getDocumentList().get(0)))
-                    .peek(tuple -> System.out.println("* Got the signature " + tuple.x + "\t[OK]"))
-                    .forEach(tuple -> collectedGame.put(tuple.y, tuple.x));
+                    .map(tuple -> new Tuple<>(tuple.x.getDocumentList().get(0), tuple.y))
+                    .peek(tuple -> System.out.println("* Got the signature " + tuple.y + "\t[OK]"))
+                    .forEach(tuple -> modifiableMap.put(tuple.x, tuple.y));
         }catch (IOException | SecurityException ex){
             System.err.println("ファイルの収集中に例外が発生しました.");
             ex.printStackTrace();
-            return false;
+            throw ex;
         }
+
+        collectedGame = Collections.unmodifiableMap(modifiableMap);
     }
 
+    /**
+     * 読み取ったゲームに対してforEachする.
+     * @param action 各エントリに対して実行するアクション.
+     */
+    public final void forEach(BiConsumer<GameDocument, Path> action){
+        collectedGame.forEach(action);
+    }
 }

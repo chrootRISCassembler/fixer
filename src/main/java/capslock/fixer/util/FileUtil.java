@@ -43,4 +43,9 @@ final public class FileUtil {
             }
         });
     }
+
+    public static Path getGameRootDir(Path gamesDir, Path exePath){
+        final Path relative =  gamesDir.toAbsolutePath().relativize(exePath.toAbsolutePath());
+        return relative.iterator().next();
+    }
 }
