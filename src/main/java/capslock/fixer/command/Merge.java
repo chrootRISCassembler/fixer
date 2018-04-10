@@ -29,6 +29,53 @@ import java.time.Instant;
 import java.util.*;
 
 public class Merge extends Command {
+    static abstract private class Task {
+        final GameDocument document;
+        final Path gameRootDir;
+        private Task(GameDocument document, Path gameRootDir){
+            this.document = document;
+            this.gameRootDir = gameRootDir;
+        }
+        abstract void run();
+    }
+
+    static private class Move extends Task {
+        private Move(GameDocument document, Path gamePath){
+            super(document, gamePath);
+        }
+        @Override
+        void run() {
+            System.out.println("ディレクトリの移動を開始します... これには時間がかかります.");
+
+            try {
+                Files.move(gameRootDir, Command.gamesDir);
+            }catch (IOException ex){
+                System.err.println("ディレクトリの移動に失敗しました.");
+                ex.printStackTrace();
+                return;
+            }
+            gameList.add(document);
+            System.out.println("ディレクトリの移動が終了しました.");
+        }
+    }
+
+    static private class Remove extends Task {
+        private Remove(GameDocument document, Path gamePath){
+            super(document, gamePath);
+        }
+        @Override
+        void run() {
+            System.out.println("古いゲームディレクトリを削除します... これには時間がかかります.");
+            try {
+                FileUtil.rmRecursive(gameRootDir);
+            }catch (IOException ex){
+                System.err.println("古いゲームディレクトリの削除に失敗しました.");
+            }
+            gameList.remove(document);
+            System.out.println("古いゲームディレクトリの削除が終了しました.");
+        }
+    }
+
     @Override
     public boolean run(String line) {
         final String[] args = line.split(" ");
@@ -106,13 +153,9 @@ public class Merge extends Command {
                     return true;
                 }
 
-                if(!RemoveOldGameRootDir(duplicated.get()))return false;
+                new Remove(duplicated.get(), FileUtil.getGameRootDir(gamesDir, duplicated.get().getExe())).run();
+                new Move(doc, Paths.get(targetPath)).run();
 
-                gameList.remove(duplicated.get());
-
-                if(!MoveGameRootDir(Paths.get(targetPath)))return false;
-
-                gameList.add(doc);
                 System.out.println("merge finished.");
                 return true;
             }else{
@@ -128,12 +171,10 @@ public class Merge extends Command {
                 return true;
             }
 
-            if(!MoveGameRootDir(Paths.get(targetPath)))return false;
-
-            gameList.add(doc);
+            new Move(doc, Paths.get(targetPath)).run();
             System.out.println("ゲームのマージに成功しました.");
+            return true;
         }
-        return true;
     }
 
     private boolean mergeOtherDir(String targetPath){
@@ -150,9 +191,7 @@ public class Merge extends Command {
             return false;
         }
 
-        final List<GameDocument> removeList = new ArrayList<>();
-        final Map<GameDocument, Path> NonCollisionMap = new HashMap<>();
-        final Map<GameDocument, Path> CollisionMap = new HashMap<>();
+        final List<Task> taskList = new ArrayList<>();
 
         //計算量がO(n^2)だがnは十分に少ないため愚直なやり方を採用している
         collector.forEach((key, value) -> {
@@ -178,58 +217,25 @@ public class Merge extends Command {
                     return;
                 }
 
-                removeList.add(duplicated.get());
-                CollisionMap.put(key, value);
-            }else {
-                NonCollisionMap.put(key, value);
+                taskList.add(new Remove(duplicated.get(), FileUtil.getGameRootDir(gamesDir, duplicated.get().getExe())));
             }
+
+            taskList.add(new Move(key, value));
         });
 
-        System.out.println(CollisionMap.size() + "件のゲームが更新され, "
-                + NonCollisionMap.size() + "件のゲームが新規に追加されます");
+        System.out.println(taskList.size() + "件の操作が実行されます.");
 
         if(!demandYN()){
             System.out.println("merge quit.");
             return true;
         }
 
-        removeList.forEach(this::RemoveOldGameRootDir);
-        CollisionMap.forEach((doc, dir) -> {
-            MoveGameRootDir(dir);
-            Command.gameList.add(doc);
-        });
-        NonCollisionMap.forEach((doc, dir) -> {
-            MoveGameRootDir(dir);
-            Command.gameList.add(doc);
-        });
+        for (int i = 0; i < taskList.size(); i++) {
+            taskList.get(i).run();
+            System.out.println(i + 1 + "/" + taskList.size() + " done.");
+        }
 
         System.out.println("merge finished.");
-        return true;
-    }
-
-    private boolean RemoveOldGameRootDir(GameDocument oldGameDocument){
-        System.out.println("古いゲームディレクトリを削除します... これには時間がかかります.");
-        try {
-            FileUtil.rmRecursive(FileUtil.getGameRootDir(gamesDir, oldGameDocument.getExe()));
-        }catch (IOException ex){
-            System.err.println("古いゲームディレクトリの削除に失敗しました.");
-            return false;
-        }
-        System.out.println("古いゲームディレクトリの削除が終了しました.");
-        return true;
-    }
-
-    private boolean MoveGameRootDir(Path gameRootDir){
-        System.out.println("ディレクトリの移動を開始します... これには時間がかかります.");
-
-        try {
-            Files.move(gameRootDir, Command.gamesDir);
-        }catch (IOException ex){
-            System.err.println("ディレクトリの移動に失敗しました.");
-            ex.printStackTrace();
-            return false;
-        }
-        System.out.println("ディレクトリの移動が終了しました.");
         return true;
     }
 }
